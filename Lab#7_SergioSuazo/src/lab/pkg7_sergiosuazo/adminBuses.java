@@ -32,6 +32,9 @@ public class adminBuses {
     public void setArchivo(File archivo) {
         this.archivo = archivo;
     }
+    public void setBus(Autobuses a){
+        listaBuses.add(a);
+    }
     
     public void cargarArchivo() {
         try {            

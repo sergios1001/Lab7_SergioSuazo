@@ -32,6 +32,11 @@ public class adminEstudiantes {
     public void setArchivo(File archivo) {
         this.archivo = archivo;
     }
+    
+    public void setEstudiante(Estudiantes a){
+        listaEstudiantes.add(a);
+    }
+    
     public void cargarArchivo() {
         try {            
             listaEstudiantes = new ArrayList();

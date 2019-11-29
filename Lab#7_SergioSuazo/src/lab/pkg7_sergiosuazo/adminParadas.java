@@ -33,6 +33,10 @@ public class adminParadas {
         this.archivo = archivo;
     }
     
+    public void setParada(Paradas a){
+        listaParadas.add(a);
+    }
+    
     public void cargarArchivo() {
         try {            
             listaParadas = new ArrayList();
