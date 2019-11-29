@@ -1,12 +1,15 @@
 package lab.pkg7_sergiosuazo;
 
+import java.io.Serializable;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class Paradas {
+public class Paradas implements Serializable{
     private String nombre;
     private int distancia,angulo,x,y;
 
+    private static final long SerialVersionUID=1002L;
+    
     public Paradas() {
     }
 

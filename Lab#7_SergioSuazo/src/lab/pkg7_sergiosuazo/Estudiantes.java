@@ -1,11 +1,14 @@
 
 package lab.pkg7_sergiosuazo;
 
-public class Estudiantes {
+import java.io.Serializable;
+
+public class Estudiantes implements Serializable{
     private String nombre;
     private int edad,cuenta;
     private Paradas parada;
 
+    private static final long SerialVersionUID=1000L;
     public Estudiantes() {
     }
 

@@ -2,13 +2,16 @@
 package lab.pkg7_sergiosuazo;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Autobuses {
+public class Autobuses implements Serializable{
     private String ID,placa;
     private int velocidad;
     private Color color;
     private ArrayList<Estudiantes> pasajeros=new ArrayList<>();
+    
+    private static final long SerialVersionUID=1001L;
 
     public Autobuses() {
     }
