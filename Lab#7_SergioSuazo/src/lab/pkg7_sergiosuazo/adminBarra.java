@@ -30,6 +30,13 @@ public class adminBarra extends Thread{
         while(i<=paradas)
         {
             barra.setValue(barra.getValue()+1);
+            try{
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException ex)
+            {
+                
+            }
         }
     }
     

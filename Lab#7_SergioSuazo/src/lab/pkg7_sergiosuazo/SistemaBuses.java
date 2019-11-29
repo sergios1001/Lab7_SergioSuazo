@@ -292,8 +292,10 @@ public class SistemaBuses extends javax.swing.JFrame {
 
         jd_Simulacion.setTitle("Simulacion");
 
+        jl_estudiantes.setModel(new DefaultListModel());
         jScrollPane1.setViewportView(jl_estudiantes);
 
+        jl_buses.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(jl_buses);
 
         jLabel13.setText("Estudiantes");
@@ -527,7 +529,10 @@ public class SistemaBuses extends javax.swing.JFrame {
         distancia=(int)js_distancia.getValue();
         angulo=(int)js_angulo.getValue();
         
+        
         Paradas p = new Paradas(nombre, distancia, angulo);
+        p.setX();
+        p.setY();
         adminParadas ap=new adminParadas("./paradas.cmd");
         ap.cargarArchivo();
         ap.setParada(p);
@@ -541,14 +546,16 @@ public class SistemaBuses extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        jd_Estudiantes.setVisible(true);
-        jd_Estudiantes.pack();
-        adminParadas ap = new adminParadas("./paradas.cbm");
+        adminParadas ap = new adminParadas("./paradas.cmd");
             ap.cargarArchivo();
             DefaultComboBoxModel modelo
                     = new DefaultComboBoxModel(
-                            ap.getListaParadas().toArray());
-            cb_parada.setModel(modelo);
+                            ap.getListaParadas().toArray());            
+
+        cb_parada.setModel(modelo);
+        jd_Estudiantes.setVisible(true);
+        jd_Estudiantes.pack();
+
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
@@ -576,6 +583,19 @@ public class SistemaBuses extends javax.swing.JFrame {
             m.addElement(e.getListaEstudiantes().get(i));
         }
         jl_estudiantes.setModel(m);
+        adminBuses b=new adminBuses("./buses.cmd");
+        b.cargarArchivo();
+        
+        DefaultListModel m2 = (DefaultListModel)jl_buses.getModel();
+        for (int i = 0; i < b.getListaBuses().size(); i++) {
+            m2.addElement(b.getListaBuses().get(i));
+        }
+        jl_estudiantes.setModel(m2);
+                    DefaultComboBoxModel modelo
+                    = new DefaultComboBoxModel(
+                            b.getListaBuses().toArray());            
+
+        cb_recorrido.setModel(modelo);
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
@@ -615,12 +635,7 @@ public class SistemaBuses extends javax.swing.JFrame {
             }
         }
         int distancia=1000000;
-        for (int i = 0; i < paradas.size(); i++) {
-            if(paradas.get(i).getDistancia()<distancia)
-            {
-                distancia=paradas.get(i).getDistancia();
-            }
-        }
+        
         adminBarra h=new adminBarra(pb_recorrido,paradas.size());
         Thread proceso = new Thread(h);
         proceso.start();
