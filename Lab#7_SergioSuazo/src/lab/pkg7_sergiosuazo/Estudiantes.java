@@ -53,7 +53,7 @@ public class Estudiantes implements Serializable{
 
     @Override
     public String toString() {
-        return nombre;
+        return nombre + " " + edad+" "+cuenta+" ";
     }
     
     

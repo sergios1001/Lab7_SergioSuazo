@@ -2,7 +2,9 @@
 package lab.pkg7_sergiosuazo;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
@@ -62,7 +64,7 @@ public class SistemaBuses extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jt_recorrido = new javax.swing.JTable();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        pb_recorrido = new javax.swing.JProgressBar();
         cb_recorrido = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
@@ -299,6 +301,11 @@ public class SistemaBuses extends javax.swing.JFrame {
         jLabel14.setText("Autobuses");
 
         jButton6.setText("---->");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
 
         jt_recorrido.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -313,6 +320,11 @@ public class SistemaBuses extends javax.swing.JFrame {
         jLabel15.setText("Seleccione un bus para la simulacion:");
 
         jButton9.setText("Inicio");
+        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton9MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_SimulacionLayout = new javax.swing.GroupLayout(jd_Simulacion.getContentPane());
         jd_Simulacion.getContentPane().setLayout(jd_SimulacionLayout);
@@ -329,7 +341,7 @@ public class SistemaBuses extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jd_SimulacionLayout.createSequentialGroup()
                         .addGroup(jd_SimulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pb_recorrido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane3)
                             .addGroup(jd_SimulacionLayout.createSequentialGroup()
                                 .addGroup(jd_SimulacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,7 +383,7 @@ public class SistemaBuses extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pb_recorrido, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jd_SimulacionLayout.createSequentialGroup()
                         .addGap(67, 67, 67)
                         .addComponent(jButton6)))
@@ -556,7 +568,67 @@ public class SistemaBuses extends javax.swing.JFrame {
         // TODO add your handling code here:
         jd_Simulacion.setVisible(true);
         jd_Simulacion.pack();
+        adminEstudiantes e=new adminEstudiantes("./estudiantes.cmd");
+        e.cargarArchivo();
+        
+        DefaultListModel m = (DefaultListModel)jl_estudiantes.getModel();
+        for (int i = 0; i < e.getListaEstudiantes().size(); i++) {
+            m.addElement(e.getListaEstudiantes().get(i));
+        }
+        jl_estudiantes.setModel(m);
     }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        // TODO add your handling code here:
+        if(jl_estudiantes.getSelectedIndex()>=0 && jl_buses.getSelectedIndex()>=0)
+        {
+            adminEstudiantes e=new adminEstudiantes("./estudiantes.cmd");
+            e.cargarArchivo();
+            adminBuses b= new adminBuses("./buses.cmd");
+            b.cargarArchivo();
+            b.getListaBuses().get(jl_buses.getSelectedIndex()).getPasajeros().add(e.getListaEstudiantes().get(jl_estudiantes.getSelectedIndex()));
+            
+            DefaultListModel m = (DefaultListModel)jl_estudiantes.getModel();
+            m.remove(jl_estudiantes.getSelectedIndex());
+            jl_estudiantes.setModel(m);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "No selecciono todos los objetos");
+        }
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+        // TODO add your handling code here:
+        ArrayList<Paradas> paradas=new ArrayList<>();
+        bus=(Autobuses)cb_recorrido.getSelectedItem();
+        for (int i = 0; i < bus.getPasajeros().size(); i++) {
+            for (int j = 0; j < paradas.size(); j++) {
+                if(paradas.get(i).equals(bus.getPasajeros().get(i).getParada()))
+                {
+                    break;
+                }
+                else
+                {
+                    paradas.add(bus.getPasajeros().get(i).getParada());
+                }
+            }
+        }
+        int distancia=1000000;
+        for (int i = 0; i < paradas.size(); i++) {
+            if(paradas.get(i).getDistancia()<distancia)
+            {
+                distancia=paradas.get(i).getDistancia();
+            }
+        }
+        adminBarra h=new adminBarra(pb_recorrido,paradas.size());
+        Thread proceso = new Thread(h);
+        proceso.start();
+        
+        
+        
+        
+    }//GEN-LAST:event_jButton9MouseClicked
 
     /**
      * @param args the command line arguments
@@ -621,7 +693,6 @@ public class SistemaBuses extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -636,10 +707,13 @@ public class SistemaBuses extends javax.swing.JFrame {
     private javax.swing.JSpinner js_edad;
     private javax.swing.JSpinner js_velocidad;
     private javax.swing.JTable jt_recorrido;
+    private javax.swing.JProgressBar pb_recorrido;
     private javax.swing.JTextField tf_ID;
     private javax.swing.JTextField tf_cuenta;
     private javax.swing.JTextField tf_nombre;
     private javax.swing.JTextField tf_nombreP;
     private javax.swing.JTextField tf_placa;
     // End of variables declaration//GEN-END:variables
+    ArrayList<Estudiantes> estudiantes;
+    Autobuses bus;
 }
